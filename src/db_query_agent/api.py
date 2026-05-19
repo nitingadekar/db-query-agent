@@ -124,7 +124,10 @@ def get_schema() -> SchemaResponse:
 def mount_frontend(app: FastAPI) -> None:
     """Mount static frontend files."""
     import os
-    frontend_dir = os.path.join(os.path.dirname(__file__), "..", "..", "frontend")
+    frontend_dir = os.environ.get(
+        "DQA_FRONTEND_DIR",
+        os.path.join(os.path.dirname(__file__), "..", "..", "frontend"),
+    )
     if os.path.isdir(frontend_dir):
         app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
 
