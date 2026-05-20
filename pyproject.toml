@@ -1,6 +1,6 @@
 [project]
 name = "db-query-agent"
-version = "0.1.0"
+version = "1.0.0"
 description = "Natural language database query agent using AWS Strands SDK and Claude via Bedrock"
 readme = "README.md"
 license = "MIT"

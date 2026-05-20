@@ -11,6 +11,8 @@ Natural language database query agent powered by [AWS Strands Agents SDK](https:
 - **FastAPI backend** — OpenAPI docs at `/docs`
 - **Simple chat UI** — Browser-based interface for interactive querying
 
+![DB Query Agent UI](docs/assets/screenshot.png)
+
 ## Quick Start
 
 ```bash
