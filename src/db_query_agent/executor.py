@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from sqlalchemy import text
 from sqlalchemy.engine import Engine
 
-
 MUTATION_KEYWORDS = re.compile(
     r"\b(INSERT|UPDATE|DELETE|DROP|ALTER|TRUNCATE|CREATE|GRANT|REVOKE)\b",
     re.IGNORECASE,
@@ -48,7 +47,7 @@ class QueryExecutor:
             result = conn.execute(text(limited_sql))
             if result.returns_rows:
                 columns = list(result.keys())
-                rows = [dict(zip(columns, row)) for row in result.fetchall()]
+                rows = [dict(zip(columns, row, strict=False)) for row in result.fetchall()]
             else:
                 conn.commit()
                 columns = []

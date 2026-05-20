@@ -1,12 +1,12 @@
 """Application configuration using pydantic-settings."""
 
-from enum import Enum
+from enum import StrEnum
 from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class ResponseFormat(str, Enum):
+class ResponseFormat(StrEnum):
     JSON = "json"
     CSV = "csv"
     TABLE = "table"
@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     default_format: ResponseFormat = ResponseFormat.JSON
 
     # API
-    api_host: str = "0.0.0.0"
+    api_host: str = "0.0.0.0"  # noqa: S104
     api_port: int = 8000
 
 

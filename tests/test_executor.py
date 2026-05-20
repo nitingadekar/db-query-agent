@@ -3,7 +3,7 @@
 import pytest
 from sqlalchemy import create_engine, text
 
-from db_query_agent.executor import QueryExecutor, QueryExecutionError
+from db_query_agent.executor import QueryExecutionError, QueryExecutor
 
 
 @pytest.fixture

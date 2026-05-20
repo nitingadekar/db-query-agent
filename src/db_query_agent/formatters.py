@@ -33,12 +33,19 @@ def format_table(result: QueryResult) -> str:
     separator = "-+-".join("-" * col_widths[col] for col in result.columns)
     lines = [header, separator]
     for row in result.rows:
-        lines.append(" | ".join(str(row.get(col, "")).ljust(col_widths[col]) for col in result.columns))
+        cells = (
+            str(row.get(col, "")).ljust(col_widths[col]) for col in result.columns
+        )
+        lines.append(" | ".join(cells))
     return "\n".join(lines)
 
 
 def format_summary(result: QueryResult) -> str:
-    return f"Query returned {result.row_count} row(s) across {len(result.columns)} column(s): {', '.join(result.columns)}"
+    cols = ", ".join(result.columns)
+    return (
+        f"Query returned {result.row_count} row(s) "
+        f"across {len(result.columns)} column(s): {cols}"
+    )
 
 
 FORMATTERS: dict[str, Any] = {

@@ -6,7 +6,7 @@ from strands import Agent, tool
 from strands.models.bedrock import BedrockModel
 
 from db_query_agent.config import Settings
-from db_query_agent.executor import QueryExecutor, QueryExecutionError, QueryResult
+from db_query_agent.executor import QueryExecutionError, QueryExecutor, QueryResult
 from db_query_agent.formatters import format_result
 from db_query_agent.schema import SchemaIntrospector
 
@@ -32,18 +32,19 @@ class DBQueryAgent:
 
         schema_desc = self._introspector.get_schema_description()
 
-        system_prompt = f"""You are a database query assistant. Your job is to help users query a database using natural language.
-
-{schema_desc}
-
-RULES:
-1. Always use the execute_query tool to run SQL queries.
-2. Write standard SQL compatible with the database.
-3. Only generate SELECT queries unless explicitly told mutations are allowed.
-4. Always explain what the query does before executing.
-5. If the user's request is ambiguous, ask for clarification.
-6. Limit results to {self._settings.max_query_rows} rows unless the user specifies otherwise.
-"""
+        system_prompt = (
+            "You are a database query assistant. "
+            "Your job is to help users query a database using natural language.\n\n"
+            f"{schema_desc}\n\n"
+            "RULES:\n"
+            "1. Always use the execute_query tool to run SQL queries.\n"
+            "2. Write standard SQL compatible with the database.\n"
+            "3. Only generate SELECT queries unless explicitly told mutations are allowed.\n"
+            "4. Always explain what the query does before executing.\n"
+            "5. If the user's request is ambiguous, ask for clarification.\n"
+            f"6. Limit results to {self._settings.max_query_rows} rows "
+            "unless the user specifies otherwise.\n"
+        )
 
         @tool
         def execute_query(sql: str) -> dict[str, Any]:

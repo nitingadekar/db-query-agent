@@ -1,7 +1,7 @@
 """Tests for FastAPI endpoints."""
 
+
 import pytest
-from unittest.mock import patch, MagicMock
 from fastapi.testclient import TestClient
 
 from db_query_agent.api import app

@@ -1,7 +1,8 @@
 """FastAPI application for the DB Query Agent."""
 
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import Any, AsyncGenerator
+from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,7 +12,6 @@ from pydantic import BaseModel
 from db_query_agent.agent import DBQueryAgent
 from db_query_agent.config import ResponseFormat, get_settings
 from db_query_agent.executor import QueryExecutionError
-from db_query_agent.formatters import format_result
 
 
 class QueryRequest(BaseModel):
@@ -94,7 +94,7 @@ def query_raw(request: RawQueryRequest) -> QueryResponse:
             sql=request.sql,
         )
     except QueryExecutionError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @app.get("/schema", response_model=SchemaResponse)
@@ -112,7 +112,12 @@ def get_schema() -> SchemaResponse:
             {
                 "name": t.name,
                 "columns": [
-                    {"name": c.name, "type": c.type, "nullable": c.nullable, "primary_key": c.primary_key}
+                    {
+                        "name": c.name,
+                        "type": c.type,
+                        "nullable": c.nullable,
+                        "primary_key": c.primary_key,
+                    }
                     for c in t.columns
                 ],
             }
