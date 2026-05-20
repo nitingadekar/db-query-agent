@@ -3,13 +3,10 @@ FROM python:3.12-slim AS builder
 WORKDIR /app
 
 COPY pyproject.toml uv.lock README.md ./
-
-RUN pip install --no-cache-dir uv && \
-    uv sync --no-dev --frozen --no-install-project
-
 COPY src/ src/
 
-RUN uv sync --no-dev --frozen
+RUN pip install --no-cache-dir uv && \
+    uv sync --no-dev --frozen
 
 
 FROM python:3.12-slim
@@ -19,6 +16,7 @@ RUN groupadd -r app && useradd -r -g app -d /app -s /sbin/nologin app
 WORKDIR /app
 
 COPY --from=builder /app/.venv /app/.venv
+COPY --from=builder /app/src /app/src
 COPY frontend/ /app/frontend/
 
 ENV PATH="/app/.venv/bin:$PATH" \
